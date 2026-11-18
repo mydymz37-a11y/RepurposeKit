@@ -16,7 +16,7 @@ A bilingual BYOK content repurposing workspace built for Hatchable.
 - PDF and DOCX parsing are not implemented. Convert to text first or paste the extracted text.
 - API key testing and generation require the browser to reach the selected provider. Provider CORS rules, key permissions, model availability and billing are controlled by that provider.
 - AI provider costs are paid by the user to OpenAI or Google. RepurposeKit does not proxy or subsidize generation.
-- The Starter/Pro/Agency prices are marketing copy only in this build. No checkout, Stripe/Lemon Squeezy webhook, AppSumo redemption, refund cancellation or license issuance is connected.
+- Internal lifetime licensing is implemented: hashed single-use codes, customer activation/status, owner-only code issuance/revocation, and server-side project limits (Starter 20, Pro 100, Agency 1,000; free accounts 3). Codes are generated inside the owner-only admin API and plaintext is returned once. This is NOT yet connected to AppSumo's vendor redemption API or to a payment provider webhook; AppSumo-origin codes must not be described as automatically verified until that integration is completed.
 - No automatic social publishing is included.
 
 ## Deploy

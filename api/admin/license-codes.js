@@ -14,6 +14,13 @@ export default async function(req,res) {
     const {rows}=await db.query("SELECT id,plan,source,status,redeemed_by,redeemed_at,created_at FROM license_codes ORDER BY created_at DESC LIMIT 100");
     return res.json({codes:rows});
   }
+  if(req.body?.action==='revoke'){
+    const id=String(req.body?.code_id||'');
+    if(!/^[0-9a-f-]{36}$/i.test(id)) return res.status(400).json({error:'Valid code_id is required.'});
+    const revoked=await db.query("UPDATE license_codes SET status='revoked',revoked_at=NOW() WHERE id=$1::uuid AND status<>'revoked' RETURNING id,status",[id]);
+    if(!revoked.rowCount) return res.status(404).json({error:'License code not found or already revoked.'});
+    return res.json({ok:true,code:revoked.rows[0]});
+  }
   const plan=String(req.body?.plan||'').toLowerCase();
   const source=['manual','appsumo','lemonsqueezy','stripe'].includes(req.body?.source)?req.body.source:'manual';
   const count=Math.max(1,Math.min(50,Number(req.body?.count)||1));

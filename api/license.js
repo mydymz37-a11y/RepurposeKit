@@ -10,7 +10,7 @@ async function hashCode(value) {
 export default async function(req,res) {
   const userId = String(req.user.id);
   if (req.method === 'GET') {
-    const { rows } = await db.query('SELECT plan,source,status,project_limit,advanced_exports,client_workspaces,activated_at FROM user_licenses WHERE user_id=$1 LIMIT 1',[userId]);
+    const { rows } = await db.query("SELECT l.plan,l.source,CASE WHEN l.status='active' AND (c.status IS NULL OR c.status<>'revoked') THEN 'active' ELSE 'revoked' END AS status,l.project_limit,l.advanced_exports,l.client_workspaces,l.activated_at FROM user_licenses l LEFT JOIN license_codes c ON c.id=l.code_id WHERE l.user_id=$1 LIMIT 1",[userId]);
     const license = rows[0] || null;
     const count = await db.query('SELECT COUNT(*)::int AS total FROM projects WHERE user_id=$1',[userId]);
     return res.json({license,projects_used:Number(count.rows[0]?.total||0),free_project_limit:3});
