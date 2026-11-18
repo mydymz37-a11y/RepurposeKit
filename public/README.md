@@ -1,0 +1,46 @@
+# RepurposeKit
+
+A bilingual BYOK content repurposing workspace built for Hatchable.
+
+## What is implemented
+- Marketing landing page with English/Arabic language switch and RTL direction.
+- Hatchable email-code end-user authentication.
+- Authenticated project saving, listing and deletion. Rows are scoped to the signed-in user.
+- Direct browser-to-provider generation for OpenAI and Gemini. The API key is held in JavaScript memory only; it is never sent to RepurposeKit API routes, written to the database, localStorage or sessionStorage.
+- Content prompt for LinkedIn, X, short video, Instagram, newsletter, YouTube SEO, article titles, a 7-day calendar and executive summary.
+- TXT/Markdown source file import (2 MB browser-side cap).
+- Copy, Markdown, TXT, CSV, JSON and Notion-ready Markdown export.
+
+## Important limits in this build
+- Article URL and YouTube URL are metadata only. Paste the article body or video transcript into the source box; automatic extraction is not implemented.
+- PDF and DOCX parsing are not implemented. Convert to text first or paste the extracted text.
+- API key testing and generation require the browser to reach the selected provider. Provider CORS rules, key permissions, model availability and billing are controlled by that provider.
+- AI provider costs are paid by the user to OpenAI or Google. RepurposeKit does not proxy or subsidize generation.
+- The Starter/Pro/Agency prices are marketing copy only in this build. No checkout, Stripe/Lemon Squeezy webhook, AppSumo redemption, refund cancellation or license issuance is connected.
+- No automatic social publishing is included.
+
+## Deploy
+This project is hosted natively by Hatchable; it is not a Next.js/Prisma deployment. The Hatchable platform handles hosting, Postgres and passwordless email-code auth.
+
+1. In the Hatchable console, complete the Email auth setup if prompted.
+2. Deploy the project from the console or through the Hatchable deploy action.
+3. In Project Settings, change visibility to Public if you intend to let customers visit the landing page. A preview URL is temporary and is not a permanent public setting.
+4. Test signup/login, then create a project and verify it appears in My projects.
+5. Add your custom domain in Hatchable project settings and follow the DNS instructions shown there.
+
+## API key privacy model
+The key is kept in a page-level JavaScript variable and the password input. It is cleared on refresh/navigation/sign-out. The browser sends it directly to the chosen provider. This means the provider receives the key and request, as required for BYOK; RepurposeKit's own backend does not receive it. Never paste an API key on a shared or untrusted device.
+
+## Database
+The migrations create a `projects` table with a text user_id, source metadata, brand settings and generated outputs. The user id is supplied by Hatchable auth and is not a locally managed password/account table.
+
+## AppSumo readiness checklist (not yet complete)
+- Complete production QA for browser-based OpenAI/Gemini requests and supported model list.
+- Add PDF and DOCX extraction with size/type validation.
+- Add provider-supported automatic article/YouTube transcript import, or keep paste-only wording.
+- Implement checkout and signed webhook verification for a payment provider.
+- Implement hashed one-time AppSumo redemption codes, activation status, duplicate redemption prevention, and refund/revocation handling.
+- Add plan entitlements and project limits in server-side API routes (not just UI).
+- Add privacy policy, terms, support contact, data deletion and backup/restore procedures.
+- Test mobile, Arabic RTL, account recovery, export formats, abuse limits and data isolation.
+- Obtain AppSumo approval before claiming an AppSumo deal is available.
