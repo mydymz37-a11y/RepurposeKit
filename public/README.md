@@ -12,7 +12,7 @@ A bilingual BYOK content repurposing workspace built for Hatchable.
 - Copy, Markdown, TXT, CSV, JSON and Notion-ready Markdown export.
 
 ## Important limits in this build
-- Public article URL extraction is available for many pages through a server-side browser session. Some publishers block automated reading; paste the article body when extraction fails. YouTube transcript extraction is not implemented; paste the transcript.
+- Public article URL extraction is available for many pages through a server-side browser session. Some publishers block automated reading; paste the article body when extraction fails. YouTube transcript extraction is available for public videos with accessible captions; availability depends on the video, language and YouTube access. Paste the transcript manually if retrieval fails.
 - PDF and DOCX parsing are not implemented. Convert to text first or paste the extracted text.
 - API key testing and generation require the browser to reach the selected provider. Provider CORS rules, key permissions, model availability and billing are controlled by that provider.
 - AI provider costs are paid by the user to OpenAI or Google. RepurposeKit does not proxy or subsidize generation.
