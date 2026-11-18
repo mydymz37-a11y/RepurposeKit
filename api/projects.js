@@ -12,6 +12,10 @@ export default async function(req,res){
  const sourceText=String(b.source_text||'');
  if(sourceText.length>100000) return res.status(413).json({error:'Source text is too large (100 KB max).'});
  if(!sourceText.trim()) return res.status(400).json({error:'Source text is required.'});
+ const licenseResult=await db.query("SELECT project_limit,status FROM user_licenses WHERE user_id=$1 LIMIT 1",[user.id]);
+ const projectLimit=licenseResult.rows[0]?.status==='active'?Number(licenseResult.rows[0].project_limit):3;
+ const usageResult=await db.query('SELECT COUNT(*)::int AS total FROM projects WHERE user_id=$1',[user.id]);
+ if(Number(usageResult.rows[0]?.total||0)>=projectLimit) return res.status(403).json({error:'Project limit reached for your current plan. Activate a lifetime license to unlock more projects.'});
  const allowed=['text','article','youtube','file'];
  const sourceType=allowed.includes(b.source_type)?b.source_type:'text';
  const language=b.language==='ar'?'ar':'en';
