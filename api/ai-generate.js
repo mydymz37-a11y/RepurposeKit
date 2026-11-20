@@ -22,7 +22,7 @@ export default async function(req,res) {
   if(rows[0].provider!==provider) return res.status(400).json({error:'Your saved key is for '+rows[0].provider+'. Select that provider or change the key in Settings.'});
   const key=await decrypt(rows[0]);
   if(provider==='openai') {
-   const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model,messages:[{role:'system',content:'You are a precise content repurposing strategist.'},{role:'user',content:prompt}],temperature:0.7,max_tokens:12000}),timeout_ms:55000});
+   const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model,messages:[{role:'system',content:'You are a precise content repurposing strategist.'},{role:'user',content:prompt}],temperature:0.7,max_tokens:12000}),signal:AbortSignal.timeout(55000)});
    const d=await r.json();
    if(!r.ok) return res.status(502).json({error:d.error?.message||'OpenAI request failed. Check your key, model and billing.'});
    return res.json({text:d.choices?.[0]?.message?.content||''});
